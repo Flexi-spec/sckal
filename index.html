@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Flexi Dev Studio - Premium Digital Development & Creative Solutions">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Flexi Studio">
+  
+  <title>Flexi Dev Studio — Creative Digital Excellence</title>
+  
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23ff6b35' width='100' height='100'/><text x='50' y='70' font-size='60' font-weight='bold' fill='white' text-anchor='middle'>F</text></svg>">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #ff6b35;
+      --secondary: #004e89;
+      --dark: #0a0a0a;
+      --light: #f5f5f5;
+      --accent: #ffd700;
+      --success: #2ecc71;
+      --warning: #f39c12;
+      --danger: #e74c3c;
+      --shadow: 0 20px 60px rgba(0,0,0,0.3);
+      --shadow-sm: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(255,107,53,0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(0,78,137,0.05) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* === HEADER === */
+    header {
+      background: rgba(10,10,10,0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,107,53,0.2);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff6b35, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-btn {
+      padding: 0.7rem 1.2rem;
+      background: rgba(255,107,53,0.1);
+      border: 1px solid rgba(255,107,53,0.3);
+      color: #e0e0e0;
+      cursor: pointer;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--primary);
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    .nav-btn:hover::before {
+      left: 0;
+    }
+
+    .nav-btn:hover {
+      color: #0a0a0a;
+      border-color: var(--primary);
+    }
+
+    .nav-btn.active {
+      background: var(--primary);
+      color: #0a0a0a;
+      border-color: var(--primary);
+    }
+
+    .install-btn {
+      padding: 0.7rem 1.2rem;
+      background: linear-gradient(135deg, var(--primary), #ff8c42);
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .install-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255,107,53,0.3);
+    }
+
+    .install-btn.hidden {
+      display: none;
+    }
+
+    /* === MAIN CONTENT === */
+    main {
+      flex: 1;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page {
+      display: none;
+      animation: slideIn 0.4s ease;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* === HOME PAGE === */
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #ff6b35, #ffd700, #ff6b35);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -2px;
+      animation: glow 3s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%, 100% { filter: drop-shadow(0 0 10px rgba(255,107,53,0.3)); }
+      50% { filter: drop-shadow(0 0 20px rgba(255,107,53,0.6)); }
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #a0a0a0;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,78,137,0.1));
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(255,107,53,0.3), transparent);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(255,107,53,0.2), rgba(0,78,137,0.15));
+    }
+
+    .feature-card:hover::before {
+      top: -10%;
+      right: -10%;
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .feature-card p {
+      color: #a0a0a0;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* === CHAT ROOM === */
+    .chat-container {
+      display: flex;
+      gap: 2rem;
+      min-height: 600px;
+    }
+
+    .chat-sidebar {
+      width: 220px;
+      background: rgba(255,107,53,0.05);
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .room-btn {
+      padding: 0.8rem 1rem;
+      background: rgba(255,107,53,0.1);
+      border: 1px solid rgba(255,107,53,0.2);
+      color: #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      font-weight: 500;
+    }
+
+    .room-btn:hover,
+    .room-btn.active {
+      background: var(--primary);
+      color: #0a0a0a;
+      border-color: var(--primary);
+    }
+
+    .chat-main {
+      flex: 1;
+      background: rgba(0,78,137,0.05);
+      border: 1px solid rgba(0,78,137,0.2);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .message {
+      display: flex;
+      gap: 1rem;
+      animation: slideIn 0.3s ease;
+    }
+
+    .message-avatar {
+      font-size: 2rem;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,107,53,0.2);
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .message-content {
+      flex: 1;
+    }
+
+    .message-user {
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 0.3rem;
+    }
+
+    .message-text {
+      background: rgba(255,255,255,0.05);
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .message-time {
+      font-size: 0.8rem;
+      color: #707070;
+      margin-top: 0.3rem;
+    }
+
+    .chat-input-area {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255,107,53,0.2);
+      display: flex;
+      gap: 1rem;
+    }
+
+    .chat-input {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,107,53,0.3);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      color: #e0e0e0;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255,107,53,0.1);
+    }
+
+    .chat-send {
+      padding: 0.8rem 1.5rem;
+      background: var(--primary);
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .chat-send:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255,107,53,0.3);
+    }
+
+    /* === PROJECTS PAGE === */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .project-card {
+      background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,78,137,0.1));
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary);
+      box-shadow: 0 15px 40px rgba(255,107,53,0.2);
+    }
+
+    .project-header {
+      padding: 2rem;
+      background: rgba(255,107,53,0.1);
+      border-bottom: 1px solid rgba(255,107,53,0.2);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .project-icon {
+      font-size: 2.5rem;
+    }
+
+    .project-status {
+      padding: 0.3rem 0.8rem;
+      background: rgba(255,107,53,0.2);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+    }
+
+    .project-status.launching {
+      background: rgba(255,215,0,0.2);
+      color: #ffd700;
+    }
+
+    .project-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .project-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-desc {
+      color: #a0a0a0;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      flex: 1;
+    }
+
+    .project-progress {
+      margin: 1rem 0;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,107,53,0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transition: width 0.3s ease;
+      border-radius: 3px;
+    }
+
+    .progress-text {
+      font-size: 0.8rem;
+      color: #a0a0a0;
+    }
+
+    .project-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .tech-tag {
+      padding: 0.3rem 0.6rem;
+      background: rgba(0,78,137,0.3);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: #a0d5ff;
+    }
+
+    .project-analysis {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,107,53,0.2);
+    }
+
+    .analysis-item {
+      text-align: center;
+    }
+
+    .analysis-value {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .analysis-label {
+      font-size: 0.75rem;
+      color: #707070;
+      margin-top: 0.2rem;
+    }
+
+    /* === ARTICLES PAGE === */
+    .articles-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .article-card {
+      background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,78,137,0.1));
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    .article-card:hover {
+      transform: translateX(10px);
+      border-color: var(--primary);
+    }
+
+    .article-badge {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,107,53,0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .article-content {
+      flex: 1;
+    }
+
+    .article-header {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .article-source {
+      padding: 0.3rem 0.8rem;
+      background: rgba(0,78,137,0.3);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      color: #a0d5ff;
+      font-weight: 600;
+    }
+
+    .article-date {
+      font-size: 0.85rem;
+      color: #707070;
+    }
+
+    .article-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+
+    .article-excerpt {
+      color: #a0a0a0;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .article-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      padding: 0.2rem 0.6rem;
+      background: rgba(255,215,0,0.2);
+      color: #ffd700;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* === TASKS PAGE === */
+    .tasks-header {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .task-filter {
+      padding: 0.7rem 1.2rem;
+      background: rgba(255,107,53,0.1);
+      border: 1px solid rgba(255,107,53,0.2);
+      color: #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .task-filter.active {
+      background: var(--primary);
+      color: #0a0a0a;
+      border-color: var(--primary);
+    }
+
+    .tasks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .task-card {
+      background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,78,137,0.1));
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .task-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .task-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--primary);
+    }
+
+    .task-priority {
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .task-priority.critical {
+      background: rgba(231,76,60,0.3);
+      color: #e74c3c;
+    }
+
+    .task-priority.high {
+      background: rgba(243,156,18,0.3);
+      color: #f39c12;
+    }
+
+    .task-priority.medium {
+      background: rgba(52,152,219,0.3);
+      color: #3498db;
+    }
+
+    .task-priority.low {
+      background: rgba(46,204,113,0.3);
+      color: #2ecc71;
+    }
+
+    .task-status {
+      padding: 0.3rem 0.8rem;
+      background: rgba(255,107,53,0.2);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .task-status.completed {
+      background: rgba(46,204,113,0.2);
+      color: #2ecc71;
+    }
+
+    .task-category {
+      color: #a0a0a0;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .task-due {
+      font-size: 0.85rem;
+      color: #707070;
+      margin-top: 1rem;
+    }
+
+    .task-checkbox {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: var(--primary);
+    }
+
+    /* === ANALYTICS PAGE === */
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,78,137,0.1));
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #a0a0a0;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .chart-container {
+      background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,78,137,0.1));
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    /* === FOOTER === */
+    footer {
+      background: rgba(10,10,10,0.9);
+      border-top: 1px solid rgba(255,107,53,0.2);
+      padding: 2rem;
+      text-align: center;
+      color: #707070;
+      margin-top: 2rem;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: var(--accent);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .nav-buttons {
+        gap: 0.3rem;
+        justify-content: center;
+      }
+
+      .nav-btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .chat-container {
+        flex-direction: column;
+      }
+
+      .chat-sidebar {
+        width: 100%;
+      }
+
+      .article-card {
+        flex-direction: column;
+      }
+
+      .features-grid,
+      .projects-grid,
+      .tasks-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .analytics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      main {
+        padding: 1rem;
+      }
+    }
+
+    /* === SCROLLBAR === */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255,107,53,0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,107,53,0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,107,53,0.5);
+    }
+
+    /* === LOADING === */
+    .loading {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: pulse 1.5s ease-in-out infinite;
+      margin: 0 3px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .offline-banner {
+      background: rgba(231,76,60,0.2);
+      border: 1px solid #e74c3c;
+      color: #e74c3c;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      text-align: center;
+      display: none;
+    }
+
+    .offline-banner.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <div class="logo" onclick="showPage('home')">⚡ FLEXI</div>
+      <nav class="nav-buttons">
+        <button class="nav-btn active" onclick="showPage('home')">Home</button>
+        <button class="nav-btn" onclick="showPage('chat')">Chat Room</button>
+        <button class="nav-btn" onclick="showPage('projects')">Explore</button>
+        <button class="nav-btn" onclick="showPage('articles')">Articles</button>
+        <button class="nav-btn" onclick="showPage('tasks')">Tasks</button>
+        <button class="nav-btn" onclick="showPage('analytics')">Analytics</button>
+        <button class="install-btn" id="installBtn" onclick="installApp()">Install App</button>
+      </nav>
+    </header>
+
+    <main>
+      <div class="offline-banner" id="offlineBanner">
+        🔴 You're offline. Some features may be limited.
+      </div>
+
+      <!-- HOME PAGE -->
+      <div id="home-page" class="page active">
+        <div class="hero">
+          <h1>Welcome to Flexi Dev Studio</h1>
+          <p>Building cinematic digital experiences that feel alive. Fast. Beautiful. Functional.</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card" onclick="showPage('chat')">
+            <div class="feature-icon">💬</div>
+            <h3>Live Chat Room</h3>
+            <p>Connect with our community in real-time. Share ideas, collaborate, and grow together.</p>
+          </div>
+          <div class="feature-card" onclick="showPage('projects')">
+            <div class="feature-icon">🚀</div>
+            <h3>Explore Projects</h3>
+            <p>Discover our portfolio of live projects with detailed analytics and technical breakdown.</p>
+          </div>
+          <div class="feature-card" onclick="showPage('articles')">
+            <div class="feature-icon">📚</div>
+            <h3>Latest Articles</h3>
+            <p>Read insights from Medium, DEV Community, and industry publications.</p>
+          </div>
+          <div class="feature-card" onclick="showPage('tasks')">
+            <div class="feature-icon">✅</div>
+            <h3>Task Manager</h3>
+            <p>Track project progress with intelligent task management and analytics.</p>
+          </div>
+          <div class="feature-card" onclick="showPage('analytics')">
+            <div class="feature-icon">📊</div>
+            <h3>Real-Time Analytics</h3>
+            <p>Monitor project health, team performance, and project metrics at a glance.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3>Progressive Web App</h3>
+            <p>Install as an app on any device. Works offline. Syncs when you're back online.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAT PAGE -->
+      <div id="chat-page" class="page">
+        <h2 style="margin-bottom: 2rem;">💬 Live Chat Room</h2>
+        <div class="chat-container">
+          <div class="chat-sidebar">
+            <h4 style="color: var(--primary); margin-bottom: 1rem;">Rooms</h4>
+            <button class="room-btn active" onclick="switchRoom('general')">🌍 General</button>
+            <button class="room-btn" onclick="switchRoom('projects')">🚀 Projects</button>
+            <button class="room-btn" onclick="switchRoom('ideas')">💡 Ideas</button>
+            <button class="room-btn" onclick="switchRoom('support')">🆘 Support</button>
+          </div>
+          <div class="chat-main">
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+              <input type="text" class="chat-input" id="chatInput" placeholder="Type your message...">
+              <button class="chat-send" onclick="sendMessage()">Send</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS PAGE -->
+      <div id="projects-page" class="page">
+        <h2 style="margin-bottom: 2rem;">🚀 Explore Our Projects</h2>
+        <div class="projects-grid" id="projectsGrid"></div>
+      </div>
+
+      <!-- ARTICLES PAGE -->
+      <div id="articles-page" class="page">
+        <h2 style="margin-bottom: 2rem;">📚 Latest Articles</h2>
+        <div class="articles-list" id="articlesList"></div>
+      </div>
+
+      <!-- TASKS PAGE -->
+      <div id="tasks-page" class="page">
+        <h2 style="margin-bottom: 2rem;">✅ Task Management</h2>
+        <div class="tasks-header">
+          <button class="task-filter active" onclick="filterTasks('all')">All Tasks</button>
+          <button class="task-filter" onclick="filterTasks('completed')">✓ Completed</button>
+          <button class="task-filter" onclick="filterTasks('in-progress')">⏳ In Progress</button>
+          <button class="task-filter" onclick="filterTasks('pending')">⏸ Pending</button>
+        </div>
+        <div class="tasks-grid" id="tasksGrid"></div>
+      </div>
+
+      <!-- ANALYTICS PAGE -->
+      <div id="analytics-page" class="page">
+        <h2 style="margin-bottom: 2rem;">📊 Real-Time Analytics</h2>
+        <div class="analytics-grid" id="analyticsGrid"></div>
+        <div class="chart-container">
+          <h3 class="chart-title">Task Completion Breakdown</h3>
+          <canvas id="taskChart" style="max-width: 100%;"></canvas>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Built with ♥️ by <strong>Flexi Dev Studio</strong> | © 2026 Ogunbiyi Jesutomisin</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+        <a href="https://flexi-spec.vercel.app">Portfolio</a> • 
+        <a href="https://github.com/flexi-spec">GitHub</a> • 
+        <a href="mailto:ogunbiyijesutomisin@gmail.com">Contact</a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+    let currentRoom = 'general';
+    let currentFilter = 'all';
+    let ws = null;
+
+    // Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration failed'));
+    }
+
+    // PWA Install Prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBtn').classList.remove('hidden');
+    });
+
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(choiceResult => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('PWA installed');
+          }
+          deferredPrompt = null;
+        });
+      }
+    }
+
+    // Navigation
+    function showPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+      // Show selected page
+      document.getElementById(pageId + '-page').classList.add('active');
+      event.target.classList.add('active');
+
+      // Load data for specific pages
+      if (pageId === 'chat') loadMessages();
+      if (pageId === 'projects') loadProjects();
+      if (pageId === 'articles') loadArticles();
+      if (pageId === 'tasks') loadTasks();
+      if (pageId === 'analytics') loadAnalytics();
+
+      window.scrollTo(0, 0);
+    }
+
+    // Chat Functions
+    function connectWebSocket() {
+      ws = new WebSocket('ws://localhost:3000');
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.type === 'new-message') {
+          if (data.data.room === currentRoom) {
+            loadMessages();
+          }
+        }
+      };
+    }
+
+    function loadMessages() {
+      fetch(`${API_BASE}/messages?room=${currentRoom}`)
+        .then(res => res.json())
+        .then(messages => {
+          const container = document.getElementById('chatMessages');
+          container.innerHTML = messages.map(msg => `
+            <div class="message">
+              <div class="message-avatar">${msg.avatar}</div>
+              <div class="message-content">
+                <div class="message-user">${msg.user}</div>
+                <div class="message-text">${msg.text}</div>
+                <div class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</div>
+              </div>
+            </div>
+          `).join('');
+          container.scrollTop = container.scrollHeight;
+        })
+        .catch(() => showOfflineMessage());
+    }
+
+    function switchRoom(room) {
+      currentRoom = room;
+      document.querySelectorAll('.room-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      loadMessages();
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      if (!input.value.trim()) return;
+
+      fetch(`${API_BASE}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user: 'You',
+          avatar: '🎨',
+          text: input.value,
+          room: currentRoom
+        })
+      })
+        .then(() => {
+          input.value = '';
+          loadMessages();
+        })
+        .catch(() => showOfflineMessage());
+    }
+
+    // Projects
+    function loadProjects() {
+      fetch(`${API_BASE}/projects`)
+        .then(res => res.json())
+        .then(projects => {
+          const grid = document.getElementById('projectsGrid');
+          grid.innerHTML = projects.map(p => `
+            <div class="project-card">
+              <div class="project-header">
+                <div class="project-icon">${p.image}</div>
+                <span class="project-status ${p.status}">${p.status}</span>
+              </div>
+              <div class="project-content">
+                <div class="project-name">${p.name}</div>
+                <div class="project-desc">${p.description}</div>
+                <div class="project-meta">
+                  ${p.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}
+                </div>
+                <div class="project-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${p.progress}%"></div>
+                  </div>
+                  <div class="progress-text">${p.progress}% Complete</div>
+                </div>
+                <div class="project-analysis">
+                  <div class="analysis-item">
+                    <div class="analysis-value">${p.analysis.roi}</div>
+                    <div class="analysis-label">ROI</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-value">${p.analysis.users}</div>
+                    <div class="analysis-label">Users</div>
+                  </div>
+                  <div class="analysis-item">
+                    <div class="analysis-value">${p.analysis.engagement}</div>
+                    <div class="analysis-label">Engagement</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        })
+        .catch(() => showOfflineMessage());
+    }
+
+    // Articles
+    function loadArticles() {
+      fetch(`${API_BASE}/articles`)
+        .then(res => res.json())
+        .then(articles => {
+          const list = document.getElementById('articlesList');
+          list.innerHTML = articles.map(a => `
+            <div class="article-card">
+              <div class="article-badge">📰</div>
+              <div class="article-content">
+                <div class="article-header">
+                  <span class="article-source">${a.source}</span>
+                  <span class="article-date">${new Date(a.date).toLocaleDateString()}</span>
+                </div>
+                <div class="article-title">${a.title}</div>
+                <div class="article-excerpt">${a.excerpt}</div>
+                <div class="article-tags">
+                  ${a.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+          `).join('');
+        })
+        .catch(() => showOfflineMessage());
+    }
+
+    // Tasks
+    function loadTasks() {
+      const filter = currentFilter === 'all' ? '' : `?status=${currentFilter}`;
+      fetch(`${API_BASE}/tasks${filter}`)
+        .then(res => res.json())
+        .then(tasks => {
+          const grid = document.getElementById('tasksGrid');
+          grid.innerHTML = tasks.map(t => `
+            <div class="task-card">
+              <input type="checkbox" class="task-checkbox" ${t.status === 'completed' ? 'checked' : ''}>
+              <div class="task-header">
+                <div class="task-title">${t.title}</div>
+                <span class="task-priority ${t.priority}">${t.priority}</span>
+              </div>
+              <span class="task-status ${t.status}">${t.status}</span>
+              <div class="task-category">📁 ${t.category}</div>
+              <div class="task-due">📅 ${new Date(t.dueDate).toLocaleDateString()}</div>
+            </div>
+          `).join('');
+        })
+        .catch(() => showOfflineMessage());
+    }
+
+    function filterTasks(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.task-filter').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      loadTasks();
+    }
+
+    // Analytics
+    function loadAnalytics() {
+      fetch(`${API_BASE}/analytics`)
+        .then(res => res.json())
+        .then(data => {
+          const grid = document.getElementById('analyticsGrid');
+          grid.innerHTML = `
+            <div class="stat-card">
+              <div class="stat-number">${data.tasks.total}</div>
+              <div class="stat-label">Total Tasks</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${data.tasks.completed}</div>
+              <div class="stat-label">Completed ✓</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${data.tasks.completionRate}</div>
+              <div class="stat-label">Completion Rate</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${data.projects.total}</div>
+              <div class="stat-label">Active Projects</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${data.projects.avgProgress}%</div>
+              <div class="stat-label">Avg Progress</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">${data.messages.total}</div>
+              <div class="stat-label">Community Messages</div>
+            </div>
+          `;
+        })
+        .catch(() => showOfflineMessage());
+    }
+
+    // Offline handling
+    function showOfflineMessage() {
+      document.getElementById('offlineBanner').classList.add('show');
+      setTimeout(() => document.getElementById('offlineBanner').classList.remove('show'), 5000);
+    }
+
+    window.addEventListener('online', () => console.log('✓ Online'));
+    window.addEventListener('offline', () => showOfflineMessage());
+
+    // Initialize
+    connectWebSocket();
+  </script>
+</body>
+</html>

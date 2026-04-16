@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flexi Studio - Admin Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #ff6b35;
+      --secondary: #004e89;
+      --dark: #0a0a0a;
+      --light: #f5f5f5;
+      --accent: #ffd700;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      overflow-x: hidden;
+    }
+
+    .admin-wrapper {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 250px;
+      background: rgba(10,10,10,0.9);
+      border-right: 1px solid rgba(255,107,53,0.2);
+      padding: 2rem 1rem;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      font-size: 1.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff6b35, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .nav-item {
+      padding: 0.8rem 1rem;
+      background: rgba(255,107,53,0.1);
+      border: 1px solid rgba(255,107,53,0.2);
+      color: #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: var(--primary);
+      color: #0a0a0a;
+      border-color: var(--primary);
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      flex: 1;
+      margin-left: 250px;
+      padding: 2rem;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,107,53,0.2);
+    }
+
+    .dashboard-header h1 {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #ff6b35, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      background: linear-gradient(135deg, var(--primary), #ff8c42);
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255,107,53,0.3);
+    }
+
+    .btn.secondary {
+      background: rgba(0,78,137,0.2);
+      color: #a0d5ff;
+      border: 1px solid rgba(0,78,137,0.4);
+    }
+
+    /* STATS GRID */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-box {
+      background: linear-gradient(135deg, rgba(255,107,53,0.1), rgba(0,78,137,0.1));
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #a0a0a0;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* CONTENT SECTIONS */
+    .section {
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    /* TABLES */
+    .table-container {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: rgba(255,107,53,0.1);
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,107,53,0.2);
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255,107,53,0.1);
+    }
+
+    tr:hover {
+      background: rgba(255,107,53,0.05);
+    }
+
+    .badge {
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge.active {
+      background: rgba(46,204,113,0.3);
+      color: #2ecc71;
+    }
+
+    .badge.pending {
+      background: rgba(243,156,18,0.3);
+      color: #f39c12;
+    }
+
+    .badge.in-progress {
+      background: rgba(52,152,219,0.3);
+      color: #3498db;
+    }
+
+    /* FORMS */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 0.8rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,107,53,0.3);
+      border-radius: 8px;
+      color: #e0e0e0;
+      font-family: inherit;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255,107,53,0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    /* MODALS */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #1a1a2e, #0a0a0a);
+      border: 1px solid rgba(255,107,53,0.2);
+      border-radius: 12px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,107,53,0.2);
+    }
+
+    .modal-header h2 {
+      color: var(--primary);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: #a0a0a0;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .close-btn:hover {
+      color: var(--primary);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        border-right: none;
+        border-bottom: 1px solid rgba(255,107,53,0.2);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      .nav-item {
+        flex: 1;
+        min-width: 120px;
+      }
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255,107,53,0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,107,53,0.3);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255,107,53,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-wrapper">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-logo">⚙️ ADMIN</div>
+      <div class="sidebar-nav">
+        <div class="nav-item active" onclick="switchSection('dashboard')">📊 Dashboard</div>
+        <div class="nav-item" onclick="switchSection('projects')">🚀 Projects</div>
+        <div class="nav-item" onclick="switchSection('tasks')">✅ Tasks</div>
+        <div class="nav-item" onclick="switchSection('messages')">💬 Messages</div>
+        <div class="nav-item" onclick="switchSection('system')">⚙️ System</div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="dashboard-header">
+        <h1>Admin Dashboard</h1>
+        <div class="header-actions">
+          <button class="btn secondary" onclick="refreshData()">🔄 Refresh</button>
+          <button class="btn" onclick="openModal('addProject')">+ New Project</button>
+        </div>
+      </div>
+
+      <!-- DASHBOARD SECTION -->
+      <div id="dashboard" class="section active">
+        <h2 class="section-title">System Overview</h2>
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <h2 class="section-title" style="margin-top: 3rem;">Recent Activity</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody id="activityLog">
+              <tr>
+                <td>Chat Room Message</td>
+                <td>Community</td>
+                <td><span class="badge active">Active</span></td>
+                <td>Just now</td>
+              </tr>
+              <tr>
+                <td>Task Updated</td>
+                <td>Management</td>
+                <td><span class="badge in-progress">In Progress</span></td>
+                <td>5 min ago</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PROJECTS SECTION -->
+      <div id="projects" class="section">
+        <h2 class="section-title">Manage Projects</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Project Name</th>
+                <th>Status</th>
+                <th>Progress</th>
+                <th>Team</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="projectsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TASKS SECTION -->
+      <div id="tasks" class="section">
+        <h2 class="section-title">Task Management</h2>
+        <div style="margin-bottom: 2rem;">
+          <button class="btn" onclick="openModal('addTask')">+ Create Task</button>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Task Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Assignee</th>
+                <th>Due Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tasksTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MESSAGES SECTION -->
+      <div id="messages" class="section">
+        <h2 class="section-title">Message Moderation</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Room</th>
+                <th>Message</th>
+                <th>Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="messagesTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SYSTEM SECTION -->
+      <div id="system" class="section">
+        <h2 class="section-title">System Health</h2>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-value" id="sysUptime">99.9%</div>
+            <div class="stat-label">Uptime</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="sysLatency">12ms</div>
+            <div class="stat-label">Avg Latency</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="sysUsers">Online</div>
+            <div class="stat-label">API Status</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="sysStorage">2.4GB</div>
+            <div class="stat-label">Storage Used</div>
+          </div>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 3rem;">System Logs</h2>
+        <div style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,107,53,0.2); border-radius: 12px; padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #a0d5ff; max-height: 400px; overflow-y: auto;">
+          <div>[2026-04-15 10:45:32] Server started successfully</div>
+          <div>[2026-04-15 10:45:35] WebSocket server ready</div>
+          <div>[2026-04-15 10:45:37] Database initialized</div>
+          <div>[2026-04-15 10:46:12] User connected: admin</div>
+          <div>[2026-04-15 10:47:05] New message in #general: 'Welcome!'</div>
+          <div>[2026-04-15 10:48:22] Task updated: #2</div>
+          <div>[2026-04-15 10:49:15] Analytics computed</div>
+          <div style="color: #2ecc71;">[2026-04-15 10:50:00] ✓ All systems nominal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div id="addProjectModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Create New Project</h2>
+        <button class="close-btn" onclick="closeModal('addProject')">✕</button>
+      </div>
+      <form onsubmit="createProject(event)">
+        <div class="form-group">
+          <label>Project Name</label>
+          <input type="text" required placeholder="e.g., Flexi Dashboard">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea required placeholder="Brief description"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>active</option>
+              <option>in-progress</option>
+              <option>launching</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Progress %</label>
+            <input type="number" min="0" max="100" value="50">
+          </div>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Create Project</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="addTaskModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Create New Task</h2>
+        <button class="close-btn" onclick="closeModal('addTask')">✕</button>
+      </div>
+      <form onsubmit="createTask(event)">
+        <div class="form-group">
+          <label>Task Title</label>
+          <input type="text" required placeholder="e.g., Design landing page">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Priority</label>
+            <select>
+              <option>low</option>
+              <option>medium</option>
+              <option>high</option>
+              <option>critical</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Due Date</label>
+            <input type="date" required>
+          </div>
+        </div>
+        <button type="submit" class="btn" style="width: 100%;">Create Task</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000/api';
+
+    function switchSection(section) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById(section).classList.add('active');
+      event.target.classList.add('active');
+      loadSectionData(section);
+    }
+
+    function openModal(type) {
+      document.getElementById(type + 'Modal').classList.add('active');
+    }
+
+    function closeModal(type) {
+      document.getElementById(type + 'Modal').classList.remove('active');
+    }
+
+    async function refreshData() {
+      loadSectionData('dashboard');
+      alert('✓ Data refreshed!');
+    }
+
+    async function loadSectionData(section) {
+      if (section === 'dashboard') {
+        loadDashboard();
+      } else if (section === 'projects') {
+        loadProjects();
+      } else if (section === 'tasks') {
+        loadTasks();
+      } else if (section === 'messages') {
+        loadMessages();
+      }
+    }
+
+    async function loadDashboard() {
+      try {
+        const res = await fetch(`${API_BASE}/analytics`);
+        const data = await res.json();
+        
+        document.getElementById('statsGrid').innerHTML = `
+          <div class="stat-box">
+            <div class="stat-value">${data.tasks.total}</div>
+            <div class="stat-label">Total Tasks</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">${data.tasks.completed}</div>
+            <div class="stat-label">Completed</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">${data.projects.total}</div>
+            <div class="stat-label">Projects</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value">${data.messages.total}</div>
+            <div class="stat-label">Messages</div>
+          </div>
+        `;
+      } catch (err) {
+        console.log('Error loading dashboard:', err);
+      }
+    }
+
+    async function loadProjects() {
+      try {
+        const res = await fetch(`${API_BASE}/projects`);
+        const projects = await res.json();
+        
+        document.getElementById('projectsTable').innerHTML = projects.map(p => `
+          <tr>
+            <td>${p.name}</td>
+            <td><span class="badge ${p.status}">${p.status}</span></td>
+            <td>${p.progress}%</td>
+            <td>${p.team.join(', ')}</td>
+            <td><button class="btn secondary" onclick="editProject(${p.id})">Edit</button></td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.log('Error loading projects:', err);
+      }
+    }
+
+    async function loadTasks() {
+      try {
+        const res = await fetch(`${API_BASE}/tasks`);
+        const tasks = await res.json();
+        
+        document.getElementById('tasksTable').innerHTML = tasks.map(t => `
+          <tr>
+            <td>${t.title}</td>
+            <td><span class="badge ${t.status}">${t.status}</span></td>
+            <td><span class="badge ${t.priority}">${t.priority}</span></td>
+            <td>${t.assignee}</td>
+            <td>${new Date(t.dueDate).toLocaleDateString()}</td>
+            <td><button class="btn secondary" onclick="editTask(${t.id})">Edit</button></td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.log('Error loading tasks:', err);
+      }
+    }
+
+    async function loadMessages() {
+      try {
+        const res = await fetch(`${API_BASE}/messages`);
+        const messages = await res.json();
+        
+        document.getElementById('messagesTable').innerHTML = messages.slice(0, 10).map(m => `
+          <tr>
+            <td>${m.user}</td>
+            <td>${m.room}</td>
+            <td>${m.text.substring(0, 50)}...</td>
+            <td>${new Date(m.timestamp).toLocaleTimeString()}</td>
+            <td><button class="btn secondary">Moderate</button></td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.log('Error loading messages:', err);
+      }
+    }
+
+    function createProject(e) {
+      e.preventDefault();
+      alert('✓ Project created successfully!');
+      closeModal('addProject');
+      loadProjects();
+    }
+
+    function createTask(e) {
+      e.preventDefault();
+      alert('✓ Task created successfully!');
+      closeModal('addTask');
+      loadTasks();
+    }
+
+    function editProject(id) {
+      alert(`Editing project ${id}`);
+    }
+
+    function editTask(id) {
+      alert(`Editing task ${id}`);
+    }
+
+    // Initial load
+    loadDashboard();
+  </script>
+</body>
+</html>
