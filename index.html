@@ -1071,10 +1071,11 @@
   </div>
 
   <script>
-    const API_BASE = 'http://localhost:3000/api';
-    let currentRoom = 'general';
-    let currentFilter = 'all';
-    let ws = null;
+    const API_BASE = '/api';                    // relative URL — works on Vercel if backend is proxied, or we'll change it later
+let currentRoom = 'general';
+let ws = null;
+
+// ... rest of your functions stay the same for now
 
     // Service Worker Registration
     if ('serviceWorker' in navigator) {
